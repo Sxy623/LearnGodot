@@ -1,2 +1,0 @@
-# LearnGodot
-Game development cases.
