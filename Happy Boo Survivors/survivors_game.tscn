@@ -1,0 +1,144 @@
+[gd_scene load_steps=5 format=3 uid="uid://clwo6oa5hm00q"]
+
+[ext_resource type="Script" path="res://survivors_game.gd" id="1_2hqdi"]
+[ext_resource type="PackedScene" uid="uid://730i6hlnh6ib" path="res://player.tscn" id="1_8pxao"]
+[ext_resource type="PackedScene" uid="uid://btgw3etpx60fp" path="res://pine_tree.tscn" id="2_gfs7w"]
+
+[sub_resource type="Curve2D" id="Curve2D_0y32d"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -200, -200, 0, 0, 0, 0, 2120, -200, 0, 0, 0, 0, 2120, 1280, 0, 0, 0, 0, -200, 1280, 0, 0, 0, 0, -200, -200)
+}
+point_count = 5
+
+[node name="Game" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_2hqdi")
+
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -30
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Border" type="CanvasLayer" parent="."]
+layer = -20
+follow_viewport_enabled = true
+
+[node name="Line2D" type="Line2D" parent="Border"]
+points = PackedVector2Array(-500, -500, 2420, -500, 2420, 1580, -500, 1580, -500, -500)
+default_color = Color(1, 0.254902, 0.490196, 1)
+
+[node name="Player" parent="." instance=ExtResource("1_8pxao")]
+unique_name_in_owner = true
+position = Vector2(960, 540)
+
+[node name="Path2D" type="Path2D" parent="Player"]
+position = Vector2(-960, -540)
+curve = SubResource("Curve2D_0y32d")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Player/Path2D"]
+unique_name_in_owner = true
+position = Vector2(-200, -200)
+
+[node name="Trees" type="Marker2D" parent="."]
+y_sort_enabled = true
+
+[node name="PineTree" parent="Trees" instance=ExtResource("2_gfs7w")]
+position = Vector2(445, 842)
+
+[node name="PineTree2" parent="Trees" instance=ExtResource("2_gfs7w")]
+position = Vector2(878, 938)
+
+[node name="PineTree3" parent="Trees" instance=ExtResource("2_gfs7w")]
+position = Vector2(336, 261)
+
+[node name="PineTree4" parent="Trees" instance=ExtResource("2_gfs7w")]
+position = Vector2(297, 438)
+
+[node name="PineTree5" parent="Trees" instance=ExtResource("2_gfs7w")]
+position = Vector2(516, 323)
+
+[node name="PineTree6" parent="Trees" instance=ExtResource("2_gfs7w")]
+position = Vector2(953, 208)
+
+[node name="PineTree7" parent="Trees" instance=ExtResource("2_gfs7w")]
+position = Vector2(1594, 920)
+
+[node name="PineTree8" parent="Trees" instance=ExtResource("2_gfs7w")]
+position = Vector2(1393, 374)
+
+[node name="PineTree9" parent="Trees" instance=ExtResource("2_gfs7w")]
+position = Vector2(1278, 688)
+
+[node name="PineTree10" parent="Trees" instance=ExtResource("2_gfs7w")]
+position = Vector2(1709, 206)
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.1
+autostart = true
+
+[node name="GameOver" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="GameOver"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.501961)
+
+[node name="Label" type="Label" parent="GameOver/ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -43.5
+offset_top = -11.5
+offset_right = 43.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 192
+text = "Game Over
+"
+
+[node name="Button" type="Button" parent="GameOver"]
+process_mode = 2
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -211.0
+offset_top = -333.0
+offset_right = 211.0
+offset_bottom = -110.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 128
+text = "Start
+"
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="ScoreLabel" type="Label" parent="HUD"]
+unique_name_in_owner = true
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 293.0
+offset_bottom = 138.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 64
+text = "Score: 0"
+
+[connection signal="health_depleted" from="Player" to="." method="_on_player_health_depleted"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="pressed" from="GameOver/Button" to="." method="new_game"]
